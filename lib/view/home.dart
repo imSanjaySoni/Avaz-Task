@@ -1,7 +1,9 @@
 import 'dart:developer';
 
-import 'package:avaz/game_constants.dart';
+import 'package:avaz/model/model.dart';
 import 'package:flutter/material.dart';
+
+import 'piece_tile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -43,10 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Dev. Sanjay Soni'),
+        title: const Text('Dev. Sanjay Soni'),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             tooltip: 'Reset Arena',
             onPressed: () {
               setState(() {
@@ -59,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text('PLAY'),
+                  title: const Text('PLAY'),
                   content: TextField(
                     autofocus: true,
                     controller: controller,
@@ -67,19 +69,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(left: 16),
-                      hintText: 'Enter Piece ID',
+                      border: const OutlineInputBorder(),
+                      contentPadding: EdgeInsets.only(left: 12),
+                      hintText: 'Enter Piece Key',
                       errorText:
                           showError ? 'Please enter a valid Piece ID.' : null,
                     ),
                     onSubmitted: (_) => play(),
-                    onChanged: (value) {},
                   ),
                 ),
               );
             },
-            icon: Icon(Icons.play_arrow),
+            icon: const Icon(Icons.play_arrow),
             tooltip: 'Play',
           ),
         ],
@@ -100,72 +101,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-}
-
-class PieceTile extends StatelessWidget {
-  const PieceTile({
-    Key? key,
-    required this.value,
-    required this.index,
-  }) : super(key: key);
-
-  final int value;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size;
-    final double pieceSize;
-    size = MediaQuery.of(context).size;
-    pieceSize = size.width / rowSize;
-
-    return AnimatedContainer(
-      height: pieceSize,
-      width: pieceSize,
-      curve: Curves.easeInCirc,
-      duration: Duration(milliseconds: 500),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white10),
-        color: value.color,
-      ),
-      child: value != 0
-          ? Center(
-              child: Text(
-                '$index\n${value.key}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          : Center(
-              child: Text(
-                '$index',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-    );
-  }
-}
-
-extension PieceEx on int {
-  int get id {
-    return avilablePieceVarients.firstWhere((element) => this == element.id).id;
-  }
-
-  Color get color {
-    return avilablePieceVarients
-        .firstWhere((element) => this == element.id)
-        .color;
-  }
-
-  String get key {
-    return avilablePieceVarients
-        .firstWhere((element) => this == element.id)
-        .key;
   }
 }

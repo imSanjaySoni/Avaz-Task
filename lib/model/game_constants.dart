@@ -1,4 +1,4 @@
-import 'package:avaz/piece.dart';
+import 'package:avaz/model/piece.dart';
 import 'package:flutter/material.dart' show Color, Colors;
 
 const int rowSize = 6;
