@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<int> arena = defaultArena;
   bool showError = false;
   final TextEditingController controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -23,17 +24,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void play() {
-    final int idForDestroy = int.parse(controller.text);
     final list = [];
 
-    setState(() {
-      arena = arena.asMap().entries.map((e) {
-        if (e.value == idForDestroy) {
-          list.add(e.key);
-        }
-        return e.value == idForDestroy ? 0 : e.value;
-      }).toList();
-    });
+    if (controller.text.isNotEmpty) {
+      final int idForDestroy = int.parse(controller.text);
+
+      setState(() {
+        arena = arena.asMap().entries.map((e) {
+          if (e.value == idForDestroy) {
+            list.add(e.key);
+          }
+          return e.value == idForDestroy ? 0 : e.value;
+        }).toList();
+      });
+    }
 
     controller.clear();
     Navigator.of(context).pop();
@@ -62,20 +66,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 context: context,
                 builder: (_) => AlertDialog(
                   title: const Text('PLAY'),
-                  content: TextField(
-                    autofocus: true,
-                    controller: controller,
-                    textAlignVertical: TextAlignVertical.center,
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(left: 12),
-                      hintText: 'Enter Piece Key',
-                      errorText:
-                          showError ? 'Please enter a valid Piece ID.' : null,
+                  content: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: controller,
+                      textAlignVertical: TextAlignVertical.center,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        contentPadding: EdgeInsets.only(left: 8),
+                        hintText: 'Enter Piece Key in [ 1 - 19 ]',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a valid Piece Key.';
+                        }
+                        final int? inInt = int.tryParse(controller.text);
+                        if (inInt != null && inInt > 0 && inInt < 20) {
+                          return null;
+                        }
+                        return 'Please enter a valid piece key.';
+                      },
+                      onFieldSubmitted: (value) {
+                        final isValid = _formKey.currentState!.validate();
+                        if (isValid) {
+                          play();
+                        }
+                      },
                     ),
-                    onSubmitted: (_) => play(),
                   ),
                 ),
               );
