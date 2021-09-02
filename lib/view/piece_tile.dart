@@ -2,14 +2,9 @@ import 'package:avaz/model/model.dart';
 import 'package:flutter/material.dart';
 
 class PieceTile extends StatelessWidget {
-  const PieceTile({
-    Key? key,
-    required this.value,
-    required this.index,
-  }) : super(key: key);
+  const PieceTile({Key? key, required this.value}) : super(key: key);
 
   final int value;
-  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +25,14 @@ class PieceTile extends StatelessWidget {
       child: value != 0
           ? Center(
               child: Text(
-                '$index\n${value.key}',
+                '${value.key}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             )
-          : Center(
-              child: Text(
-                '$index',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+          : Container(),
     );
   }
 }

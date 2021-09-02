@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         contentPadding: EdgeInsets.only(left: 8),
-                        hintText: 'Enter Piece Key in [ 1 - 19 ]',
+                        hintText: 'Enter Piece Key between [ 1 - 19 ]',
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -106,17 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Align(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.center,
         child: Wrap(
           children: arena
               .asMap()
               .entries
-              .map(
-                (e) => PieceTile(
-                  value: e.value,
-                  index: e.key,
-                ),
-              )
+              .map((e) => PieceTile(value: e.value))
               .toList(),
         ),
       ),
